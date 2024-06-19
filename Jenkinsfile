@@ -9,14 +9,25 @@ pipeline {
             }
         }
 
+        stage('Verify Checkout') {
+            steps {
+                // List directory contents to verify checkout
+                bat 'dir'
+            }
+        }
+
         stage('Build and Deploy') {
             steps {
                 script {
                     // Xây dựng và triển khai bằng Docker Compose
-                    bat 'docker-compose down'
-
-                    // Chỉ khởi động lại dịch vụ WordPress
-                    bat 'docker-compose up -d'
+                    try {
+                        bat 'docker-compose down'
+                        // Chỉ khởi động lại dịch vụ WordPress
+                        bat 'docker-compose up -d'
+                    } catch (Exception e) {
+                        echo "Error during Docker Compose operations: ${e}"
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
             }
         }
