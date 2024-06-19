@@ -13,6 +13,12 @@ pipeline {
             steps {
                 // List directory contents to verify checkout
                 bat 'dir'
+                // Check for docker-compose.yml file
+                script {
+                    if (!fileExists('docker-compose.yml')) {
+                        error "docker-compose.yml file not found"
+                    }
+                }
             }
         }
 
@@ -27,6 +33,7 @@ pipeline {
                     } catch (Exception e) {
                         echo "Error during Docker Compose operations: ${e}"
                         currentBuild.result = 'FAILURE'
+                        throw e
                     }
                 }
             }
