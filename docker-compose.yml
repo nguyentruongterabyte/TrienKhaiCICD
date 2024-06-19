@@ -1,0 +1,66 @@
+version: '3.1'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "9999:80"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+      - wordpress
+      - magento
+
+  wordpress:
+    image: wordpress:latest
+    environment:
+      WORDPRESS_DB_HOST: wordpress_db
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wordpress_pass
+      WORDPRESS_DB_NAME: wordpress_db
+    volumes:
+      - ./wordpress/wp-content:/var/www/html/wp-content
+    depends_on:
+      - wordpress_db
+
+  wordpress_db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wordpress_pass
+    volumes:
+      - ./wordpress/db_data:/var/lib/mysql
+
+  magento:
+    image: markoshust/magento-nginx:latest
+    volumes:
+      - ./magento/src:/var/www/html
+    depends_on:
+      - magento_php
+
+  magento_php:
+    image: markoshust/magento-php:latest
+    volumes:
+      - ./magento/src:/var/www/html
+    environment:
+      MAGENTO_ROOT: /var/www/html
+      MYSQL_HOST: magento_db
+      MYSQL_DATABASE: magento_db
+      MYSQL_USER: magento_user
+      MYSQL_PASSWORD: magento_pass
+    depends_on:
+      - magento_db
+
+  magento_db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: magento_db
+      MYSQL_USER: magento_user
+      MYSQL_PASSWORD: magento_pass
+    volumes:
+      - ./magento/db_data:/var/lib/mysql
+
+
