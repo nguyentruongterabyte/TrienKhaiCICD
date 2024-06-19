@@ -1,3 +1,4 @@
 magento/db_data/mysql.sock
 wordpress/db_data/mysql.sock
 magento/db_data/ibdata1
+wordpress/db_data/ibdata1
