@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Lấy mã nguồn từ repository
-                git credentialsId: 'docker', url: 'https://github.com/nguyentruongterabyte/CI_CD.git', branch: 'main'
+                git credentialsId: 'docker', url: 'https://github.com/nguyentruongterabyte/TrienKhaiCICD.git', branch: 'main'
             }
         }
 
