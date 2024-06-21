@@ -11,9 +11,9 @@ pipeline {
 
         stage('Verify Checkout') {
             steps {
-                // List directory contents to verify checkout
+                // Liệt kê những đường dẫn cần check out
                 bat 'dir'
-                // Check for docker-compose.yml file
+                // Kiểm tra file docker-compose.yml có tồn tại không
                 script {
                     if (!fileExists('docker-compose.yml')) {
                         error "docker-compose.yml file not found"
